@@ -1,5 +1,4 @@
 import random as lol
-import pygame
 
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
 ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
@@ -150,70 +149,71 @@ def push(player, dealer):
 
 
 # GAMEPLAY code
+def game():
+    while True:
+        print('Welcome to BlacJac! \n\
+        hope you know the rules.')
 
-while True:
-    print('Welcome to BlacJac! \n\
-    hope you know the rules.')
+        deck = Deck()
+        deck.shuffle()
 
-    deck = Deck()
-    deck.shuffle()
+        player_hand = Hand()
+        player_hand.add_card(deck.deal())
+        player_hand.add_card(deck.deal())
 
-    player_hand = Hand()
-    player_hand.add_card(deck.deal())
-    player_hand.add_card(deck.deal())
-
-    dealer_hand = Hand()
-    dealer_hand.add_card(deck.deal())
-    dealer_hand.add_card(deck.deal())
-
-
-    player_chips = Chips()
+        dealer_hand = Hand()
+        dealer_hand.add_card(deck.deal())
+        dealer_hand.add_card(deck.deal())
 
 
-    take_bet(player_chips)
+        player_chips = Chips()
 
 
-    show_some(player_hand, dealer_hand)
+        take_bet(player_chips)
 
-    while playing:
-        hit_or_stand(deck, player_hand)
+
         show_some(player_hand, dealer_hand)
 
-        if player_hand.value > 21:
-            player_busts(player_hand, dealer_hand, player_chips)
+        while playing:
+            hit_or_stand(deck, player_hand)
+            show_some(player_hand, dealer_hand)
+
+            if player_hand.value > 21:
+                player_busts(player_hand, dealer_hand, player_chips)
+                break
+
+
+        if player_hand.value <= 21:
+
+            while dealer_hand.value < 17:
+                hit(deck, dealer_hand)
+
+
+            show_all(player_hand, dealer_hand)
+
+
+            if dealer_hand.value > 21:
+                dealer_busts(player_hand, dealer_hand, player_chips)
+
+            elif dealer_hand.value > player_hand.value:
+                dealer_wins(player_hand, dealer_hand, player_chips)
+
+            elif dealer_hand.value < player_hand.value:
+                player_wins(player_hand, dealer_hand, player_chips)
+
+            else:
+                push(player_hand, dealer_hand)
+
+
+        print("\nPlayer's winnings are", player_chips.total)
+
+
+        new_game = input("Would you like to play another hand? Enter 'y' or 'n' ")
+        if new_game[0].lower() == 'y':
+            playing = True
+            continue
+        else:
+            print("no thanks for playing!")
             break
 
-
-    if player_hand.value <= 21:
-
-        while dealer_hand.value < 17:
-            hit(deck, dealer_hand)
-
-
-        show_all(player_hand, dealer_hand)
-
-
-        if dealer_hand.value > 21:
-            dealer_busts(player_hand, dealer_hand, player_chips)
-
-        elif dealer_hand.value > player_hand.value:
-            dealer_wins(player_hand, dealer_hand, player_chips)
-
-        elif dealer_hand.value < player_hand.value:
-            player_wins(player_hand, dealer_hand, player_chips)
-
-        else:
-            push(player_hand, dealer_hand)
-
-
-    print("\nPlayer's winnings are", player_chips.total)
-
-
-    new_game = input("Would you like to play another hand? Enter 'y' or 'n' ")
-    if new_game[0].lower() == 'y':
-        playing = True
-        continue
-    else:
-        print("no thanks for playing!")
-        break
 
