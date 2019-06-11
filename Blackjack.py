@@ -6,7 +6,7 @@ values = {'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eig
           'Nine': 9, 'Ten': 10, 'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
 
 playing = True
-
+cover=lol.choice(['Emerald','Peter River','Pomegranate','Sun Flower'])
 class Card:
 
     def __init__(self, suit, rank):
@@ -89,8 +89,8 @@ def show_cards(ren,val,suite,pos):
     surface = pygame.image.load(f'cards/{suite}/{val}.png')
     surface = pygame.transform.scale(surface, (100, 150))
     ren.blit(surface, pos)
-def hidden(ren,pos):
-    cover=lol.choice(['Emerald','Peter River','Pomegranate','Sun Flower'])
+def hidden(ren,pos,cover):
+
     surface = pygame.image.load(f'cards/Back Covers/{cover}.png')
     surface = pygame.transform.scale(surface, (100, 150))
     ren.blit(surface, pos)
@@ -122,7 +122,8 @@ class Game:
              playing = False
          break
     def show_some(self,player, dealer,ren):
-        #hidden(ren,DCS[0])
+        global cover
+        hidden(ren,DCS[0],cover)
         for index, card in enumerate(dealer.cards):
             if card.rank == 'Jack':
                 val='J'
@@ -134,6 +135,8 @@ class Game:
                 val='A'
             else:
                 val=values[card.rank]
+            if index==0 :
+                continue
             show_cards(ren,val,card.suit,DCS[index])
         for index, card in enumerate(player.cards):
             if card.rank == 'Jack':
